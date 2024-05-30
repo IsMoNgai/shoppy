@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import { useLoginMutation } from '../../redux/api/userApiSlice'
-import { setCredientials } from '../../redux/features/auth/authSlice'
+import { setCredentials } from '../../redux/features/auth/authSlice'
 import { toast } from 'react-toastify'
 import Loader from '../../components/Loader'
 
@@ -32,7 +32,7 @@ const Login = () => {
         try {
             const res = await login({email, password}).unwrap()
             console.log(res)
-            dispatch(setCredientials({ ...res }))
+            dispatch(setCredentials({ ...res }))
         } catch (error) {
             toast.error(error?.data?.message || error.message)
         }
