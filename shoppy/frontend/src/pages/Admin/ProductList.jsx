@@ -129,7 +129,8 @@ const ProductList = () => {
                         </div>
                         <div>
                             <label htmlFor="">Category</label> <br />
-                            <select placeholder="Choose Category" className="p-4 mb-3 w-[30rem] border rounded-lg bg-gray text-black" onChange={e => setCategory(e.target.value)}>
+                            <select placeholder="Choose Category" className="p-4 mb-3 w-[30rem] border rounded-lg bg-gray text-black" value={category} onChange={e => setCategory(e.target.value)}>
+                                <option>Choose Category</option>
                                 {categories?.map((c) => (
                                     <option key={c._id} value={c._id}>
                                         {c.name}
