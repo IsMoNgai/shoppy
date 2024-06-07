@@ -17,6 +17,9 @@ import Profile from './pages/User/Profile.jsx'
 import AdminRoute from './pages/Admin/AdminRoute.jsx'
 import UserList from './pages/Admin/UserList.jsx'
 import Category from './pages/Admin/Category.jsx'
+import ProductList from './pages/Admin/ProductList.jsx'
+import AllProducts from './pages/Admin/AllProducts.jsx'
+import ProductUpdate from './pages/Admin/ProductUpdate.jsx'
 
 /* route element from App jsx and Login jsx */
 
@@ -31,9 +34,12 @@ const router = createBrowserRouter(
       </Route>
 
       {/* Admin Routes  */}
-      <Route path="" element={<AdminRoute />}>
-        <Route path='/admin/userlist' element={<UserList />}/>
-        <Route path='/admin/categorylist' element={<Category/>}/>
+      <Route path="/admin" element={<AdminRoute />}>
+        <Route path='userlist' element={<UserList />}/>
+        <Route path='categorylist' element={<Category/>}/>
+        <Route path='productlist' element={<ProductList/>}/> 
+        <Route path='allproducts' element={<AllProducts/>}/>
+        <Route path='product/update/:_id' element={<ProductUpdate/>}/>
       </Route>
     </Route>
   )

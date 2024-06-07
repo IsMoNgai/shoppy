@@ -35,8 +35,8 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res)=> {
     try {
-        const {name, description,image,  price, category, quantity, brand} = req.fields
-
+        const {image, name, description,  price, category, quantity, brand} = req.fields
+        
         //Validation
         switch(true) {  
             case !name:
@@ -128,24 +128,35 @@ const addProductReview = asyncHandler(async (req, res)=> {
 
         const product = await Product.findById(req.params.id)
 
+        if(isNaN(rating)) {
+            res.status(400)
+            throw new Error("Rating  must be a number")
+        }
+
+        if(!comment) {
+            res.status(400)
+            throw new Error("Comment is required")
+        }
+
         if(product) {
             const alreadyReviewed = product.review.find(r => r.user.toString() === req.user._id.toString())
+
             if(alreadyReviewed) {
                 res.status(400)
-                throw new Error("Product already reviewed")
+                res.json("Product already reviewed")
             }
 
             const review = {
                 name : req.user.username,
                 rating: Number(rating),
-                comment: comment,
+                review: comment,
                 user : req.user._id
             }
 
             product.review.push(review)
-            product.numReview = product.review.length
+            product.numReviews = product.review.length
 
-            product.rating = product.review.reduce((acc, item) => item.rating + acc , 0) / product.reviewslength
+            product.rating = Number(product.review.reduce((acc, item) => item.rating + acc , 0) / product.review.length)
 
             await product.save()
             res.status(201).json({message: "Review added"})
@@ -160,6 +171,36 @@ const addProductReview = asyncHandler(async (req, res)=> {
     }
 })
 
+const fetchTopProduct = asyncHandler(async (req, res)=> {
+    try {
+        // use reduce to loop through whole list and find only return the first item that satisfy
+        // const product = await Product.find({})
+        // const topProduct = product.reduce((top, item) => (item.rating > top.rating ? top = item : top = top), product[0])
+
+        // rating first if rating is the same then will compare name
+        const products = await Product.find({}).limit(12).sort({ rating: -1, name: 1 });
+
+        res.status(201).json(products)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json("Server Error")
+    }
+})
+
+const fetchNewProduct = asyncHandler(async (req, res) => {
+    try {
+        const products = await Product.find({})
+            .sort({ createdAt: -1 }) // Sort by createdAt descending
+            .limit(12); // Limit to 12 products
+
+        res.json(products)
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json("Server Error")
+    }
+})
+
 export {
     addProduct,
     updateProduct,
@@ -168,4 +209,6 @@ export {
     fetchProductById,
     fetchAllProduct,
     addProductReview,
+    fetchTopProduct,
+    fetchNewProduct,
 } 

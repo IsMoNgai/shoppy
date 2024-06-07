@@ -10,6 +10,8 @@ import {
     fetchProductById,
     fetchAllProduct,
     addProductReview,
+    fetchTopProduct,
+    fetchNewProduct,
 } from '../controllers/productController.js'
 
 const router = express.Router()
@@ -23,6 +25,8 @@ Ex: allproduct is after / but before :id
 */
 router.route('/').get(fetchProduct).post(authenticate, authorizeAdmin, formidable(), addProduct)
 router.route('/allproducts').get(fetchAllProduct)
-router.route('/:id/reviews').post(authenticate, authorizeAdmin, addProductReview)
-router.route('/:id').get(fetchProductById).put(authenticate, authorizeAdmin, formidable(), updateProduct).delete(authenticate, authorizeAdmin, deleteProduct)
+router.route('/top').get(fetchTopProduct)
+router.route('/new').get(fetchNewProduct)
+router.route('/:id/reviews').post(authenticate, authorizeAdmin, checkId, addProductReview)
+router.route('/:id').put(authenticate, authorizeAdmin, formidable(), updateProduct).get(fetchProductById).delete(authenticate, authorizeAdmin, deleteProduct)
 export default router;     
