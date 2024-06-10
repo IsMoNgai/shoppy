@@ -87,8 +87,6 @@ const fetchProduct = asyncHandler(async (req, res)=> {
         const products = await Product.find({...keyword}).limit(pageSize)
 
         res.json({products, page: 1, pages: Math.ceil(count/pageSize), hasMore: false}) 
-
-        res.json(products)
     } catch (error) {
         console.error(error) 
         res.status(400).json(error.message)
